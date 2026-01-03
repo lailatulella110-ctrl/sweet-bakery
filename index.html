@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Sweet Bakery - Toko Kue Terbaik</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Sweet Bakery">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#ff6b6b">
+    
+    <!-- iOS Safari specific -->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-touch-fullscreen" content="yes">
+    
+    <!-- Favicon and App Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>🧁</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>🧁</text></svg>">
+    
+    <!-- Fonts and Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        /* Allow text selection for inputs and content */
+        input, textarea, .menu-item p, .about-text, .contact-form {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            /* iOS Safari safe area */
+            padding-top: calc(1rem + env(safe-area-inset-top));
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+        }
+
+        .nav-links a:hover, .nav-links a:active {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .cart-icon {
+            position: relative;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.75rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-icon:hover, .cart-icon:active {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.1);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border: 2px solid white;
+        }
+
+        .mobile-menu {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.75rem;
+            border-radius: 8px;
+            min-width: 44px;
+            min-height: 44px;
+            touch-action: manipulation;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+                        url('https://images.unsplash.com/photo-1486427944299-d1955d23e34d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            height: calc(100vh - env(safe-area-inset-top));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2rem, 8vw, 3.5rem);
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+            font-weight: 700;
+        }
+
+        .hero-content p {
+            font-size: clamp(1rem, 4vw, 1.3rem);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s both;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            animation: fadeInUp 1s ease 0.4s both;
+            font-weight: 600;
+            min-height: 48px;
+            touch-action: manipulation;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .cta-button:hover, .cta-button:active {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Sections */
+        .section {
+            padding: 4rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(2rem, 6vw, 2.5rem);
+            margin-bottom: 3rem;
+            color: #333;
+            font-weight: 700;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .about-text h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+
+        .about-text ul {
+            margin-top: 1.5rem;
+            list-style: none;
+        }
+
+        .about-text li {
+            padding: 0.5rem 0;
+            font-weight: 500;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 300px;
+            background: url('https://images.unsplash.com/photo-1517433670267-08bbd4be890f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        /* Menu Section */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            touch-action: manipulation;
+        }
+
+        .menu-item:active {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .menu-item-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .menu-item-content {
+            padding: 1.5rem;
+        }
+
+        .menu-item h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .menu-item p {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart-btn {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            min-height: 48px;
+            font-size: 0.95rem;
+            touch-action: manipulation;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .add-to-cart-btn:active {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            height: calc(100vh + env(safe-area-inset-top));
+            background: white;
+            box-shadow: -5px 0 25px rgba(0,0,0,0.2);
+            transition: right 0.3s ease;
+            z-index: 1001;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .cart-sidebar.active {
+            right: 0;
+        }
+
+        .cart-header {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            /* iOS safe area */
+            padding-top: calc(1.5rem + env(safe-area-inset-top));
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+        }
+
+        .cart-items {
+            padding: 1rem;
+            min-height: calc(100vh - 200px);
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-info h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .cart-item-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .quantity-btn {
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            touch-action: manipulation;
+            transition: all 0.2s ease;
+        }
+
+        .quantity-btn:active {
+            background: #e9ecef;
+            transform: scale(0.95);
+        }
+
+        .remove-item {
+            color: #ff4757;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            min-width: 40px;
+            min-height: 40px;
+            touch-action: manipulation;
+        }
+
+        .cart-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #eee;
+            background: #f8f9fa;
+            position: sticky;
+            bottom: 0;
+            /* iOS safe area */
+            padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+        }
+
+        .cart-total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .checkout-btn {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            border: none;
+            padding: 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            font-size: 1.1rem;
+            min-height: 50px;
+            touch-action: manipulation;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .checkout-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1002;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            min-width: 44px;
+            min-height: 44px;
+            touch-action: manipulation;
+        }
+
+        .order-summary {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .order-total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            border-top: 2px solid #ddd;
+            padding-top: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            padding: 2rem;
+            border-radius: 20px;
+            color: white;
+        }
+
+        .contact-info h3 {
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .contact-info p {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .contact-form {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: white;
+            min-height: 48px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            /* iOS safe area */
+            padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+        }
+
+        .social-links {
+            margin: 1.5rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            padding: 0.75rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            min-width: 50px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+        }
+
+        .social-links a:hover, .social-links a:active {
+            color: #feca57;
+            background: rgba(254, 202, 87, 0.1);
+        }
+
+        /* Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: calc(20px + env(safe-area-inset-bottom));
+            right: 20px;
+            background: #25d366;
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            z-index: 999;
+            animation: pulse 2s infinite;
+            touch-action: manipulation;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading state */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff30;
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Empty cart message */
+        .empty-cart {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #666;
+        }
+
+        .empty-cart i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            top: calc(80px + env(safe-area-inset-top));
+            right: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1003;
+            font-weight: 500;
+            transform: translateY(-100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: linear-gradient(135deg, #ff6b6b, #feca57);
+                flex-direction: column;
+                padding: 1rem 0;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                margin: 0.5rem 1rem;
+                padding: 1rem;
+                text-align: center;
+            }
+
+            .mobile-menu {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .hero {
+                height: calc(100vh - 80px);
+                padding: 1rem;
+            }
+
+            .section {
+                padding: 3rem 1rem;
+            }
+
+            .modal-content {
+                padding: 1rem;
+                margin: 1rem;
+                max-height: calc(100vh - 2rem);
+            }
+        }
+
+        @media (min-width: 769px) {
+            .about-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 3rem;
+            }
+
+            .about-image {
+                height: 400px;
+            }
+
+            .contact-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 3rem;
+            }
+
+            .menu-grid {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 2rem;
+            }
+
+            .menu-item-image {
+                height: 250px;
+            }
+
+            .cart-sidebar {
+                width: 400px;
+                right: -400px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hero-content {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            .menu-item:hover {
+                transform: translateY(-10px);
+            }
+
+            .cart-icon:hover {
+                color: #333;
+                transform: scale(1.1);
+            }
+
+            .add-to-cart-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Prevent zoom on input focus (iOS) */
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            select, textarea, input[type="text"], input[type="password"],
+            input[type="datetime"], input[type="datetime-local"],
+            input[type="date"], input[type="month"], input[type="time"],
+            input[type="week"], input[type="number"], input[type="email"],
+            input[type="url"], input[type="search"], input[type="tel"],
+            input[type="color"] {
+                font-size: 16px !important;
+            }
+        }
+
+        /* Hide scrollbar but keep functionality */
+        .cart-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .cart-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .cart-sidebar::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2);
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="#home" class="logo">
+                <span>🧁</span>
+                <span>Sweet Bakery</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">Tentang</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#contact">Kontak</a></li>
+            </ul>
+            <div class="cart-icon" onclick="toggleCart()" role="button" aria-label="Buka keranjang belanja">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </div>
+            <button class="mobile-menu" onclick="toggleMobileMenu()" aria-label="Menu navigasi">☰</button>
+        </nav>
+    </header>
+<!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Selamat Datang di Sweet Bakery</h1>
+            <p>Kue terbaik dibuat dengan cinta untuk kebahagiaan Anda</p>
+            <a href="#menu" class="cta-button">Lihat Menu Kami</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <h2 class="section-title">Tentang Kami</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <h3>Sweet Bakery</h3>
+                <p>Sweet Bakery telah melayani pelanggan sejak tahun 2021, dengan kue-kue berkualitas yang dibuat dari bahan terbaik dan resep andalan. Setiap kue dibuat dengan sepenuh hati untuk menghadirkan kebahagiaan di setiap gigitan.</p>
+                <ul style="margin-top: 1rem; list-style-position: inside;">
+                    <li>🧁 Bahan berkualitas premium</li>
+                    <li>🧁 Resep tradisional</li>
+                    <li>🧁 Dibuat fresh setiap hari</li>
+                    <li>🧁 Custom order tersedia</li>
+                </ul>
+            </div>
+            <div class="about-image"style="background-image: url('galerii.jpg')"></div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="section">
+        <h2 class="section-title">Menu Kami</h2>
+        <div class="menu-grid">
+            <div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('tart.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Kue Tart Coklat</h3>
+                    <p>Kue cokelat klasik dengan lapisan ganache lembut yang kaya rasa, cocok untuk perayaan spesial</p>
+                    <div class="price">Rp 250.000</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Kue Tart Coklat', 250000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('velvet.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Red Velvet Cake</h3>
+                    <p>Kue berwarna merah ikonik dengan tekstur lembut, dipadukan dengan cream cheese frosting yang gurih dan manis</p>
+                    <div class="price">Rp 280.000</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Red Velvet Cake', 280000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('cake.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Cheesecake</h3>
+                    <p>Cheesecake lembut ala New York dengan dasar biskuit renyah dan topping buah beri segar</p>
+                    <div class="price">Rp 180.000</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Cheesecake', 180000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('strawberry.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Strawberry Shortcake</h3>
+                    <p>Kue spons ringan dengan lapisan krim segar dan potongan buah stroberi asli yang memberikan sensasi segar.</p>
+                    <div class="price">Rp 220.000</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Strawberry Shortcake', 220000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('tiramisuu.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Tiramisu</h3>
+                    <p>Dessert khas Italia yang autentik, menggunakan perpaduan sempurna antara mascarpone dan aroma espresso</p>
+                    <div class="price">Rp 200.000</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Tiramisu', 200000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('cupcakes.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Cupcakes</h3>
+                    <p>Kue mungil dengan berbagai pilihan rasa dan dekorasi frosting yang cantik dan menggemaskan</p>
+                    <div class="price">Rp 25.000/pcs</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Cupcakes', 25000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjangs
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('macaronn.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Macarons</h3>
+                    <p>Camilan mungil khas Prancis dengan aneka warna ceria dan rasa yang unik di setiap kepingnya.</p>
+                    <div class="price">Rp 15.000/pcs</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Macarons', 15000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('croissant.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Chocolate Croissant</h3>
+                    <p> Croissant mentega yang renyah dan berlapis dengan isian cokelat premium yang melimpah di setiap gigitan</p>
+                    <div class="price">Rp 35.000/pcs</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Chocolate Croissant', 35000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('cookies.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Cookies</h3>
+                    <p>Kue kering yang renyah di luar namun lembut di dalam, penuh dengan taburan cokelat chip berkualitas</p>
+                    <div class="price">Rp 15.000/pcs</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Fruit Tart', 45000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+			<div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('cromboloni.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Cromboloni</h3>
+                    <p>Perpaduan unik antara tekstur renyah croissant dan bentuk donat, lengkap dengan topping glaze yang lumer</p>
+                    <div class="price">Rp 20.000/pcs</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Fruit Tart', 45000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+			<div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('donat.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Donat</h3>
+                    <p>Donat klasik yang empuk dengan berbagai pilihan topping glaze dan taburan yang menarik.</p>
+                    <div class="price">Rp 10.000/pcs</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Fruit Tart', 45000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+			<div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('garlic.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Garlic Bread</h3>
+                    <p>Roti panggang aroma bawang putih yang harum dan gurih, tekstur renyah di luar namun lembut di dalam</p>
+                    <div class="price">Rp 15.000/pcs</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Fruit Tart', 45000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+			<div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('nastar.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Nastar</h3>
+                    <p>Kue kering klasik dengan selai nanas buatan sendiri yang manis dan segar, memiliki tekstur yang lumer di mulut</p>
+                    <div class="price">Rp 75.000/pcs</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Fruit Tart', 45000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+			<div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('pizza.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Pizza</h3>
+                    <p>Pizza dengan adonan roti yang empuk, topping melimpah, dan keju yang mulur sempurna</p>
+                    <div class="price">Rp 125.000/pcs</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Fruit Tart', 45000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+			<div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('puding.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Puding</h3>
+                    <p>Puding sutra lembut dengan siraman saus buah beri yang segar, pilihan pencuci mulut yang ringan dan elegan.</p>
+                    <div class="price">Rp 35.000/pcs</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Fruit Tart', 45000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+			<div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('bomboloni.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Bomboloni</h3>
+                    <p>Donat empuk tanpa lubang ala Italia, diisi dengan krim cokelat pekat yang meluap</p>
+                    <div class="price">Rp 10.000/pcs</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Fruit Tart', 45000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+			<div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('wafel.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Waffle</h3>
+                    <p>Waffle renyah dan lembut dengan topping buah beri segar serta siraman sirup manis yang menggugah selera.</p>
+                    <div class="price">Rp 35.000/pcs</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Fruit Tart', 45000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+			<div class="menu-item">
+                <div class="menu-item-image" style="background-image: url('lapis.jpg')"></div>
+                <div class="menu-item-content">
+                    <h3>Lapis Legit</h3>
+                    <p>Kue lapis tradisional yang kaya akan rempah dan mentega, dibuat dengan ketelitian tinggi di setiap lapisannya</p>
+                    <div class="price">Rp 250.000/pcs</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('Fruit Tart', 45000)">
+                        <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- Contact Section -->
+    <section id="contact" class="section">
+        <h2 class="section-title">Hubungi Kami</h2>
+        <div class="contact-content">
+            <div class="contact-info">
+                <h3>Informasi Kontak</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Jl. Manis Raya No. 123, Jakarta</p>
+                <p><i class="fas fa-phone"></i> +62 822-2881-0026</p>
+                <p><i class="fas fa-envelope"></i> info@sweetbakery.com</p>
+                <p><i class="fas fa-clock"></i> Senin - Minggu: 07:00 - 22:00</p>
+                
+                <h3 style="margin-top: 2rem;">Jam Operasional</h3>
+                <p>Senin - Jumat: 07:00 - 22:00</p>
+                <p>Sabtu - Minggu: 08:00 - 23:00</p>
+            </div>
+            <div class="contact-form">
+                <h3>Kirim Pesan</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="name">Nama</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Pesan</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="cta-button">Kirim Pesan</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Keranjang Belanja</h3>
+            <button class="close-cart" onclick="toggleCart()">×</button
+        </div>
+        <div class="cart-items" id="cart-items">
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Keranjang belanja kosong</p>
+            </div>
+        </div>
+        <div class="cart-footer" id="cart-footer" style="display: none;">
+            <div class="cart-total" id="cart-total">Total: Rp 0</div>
+            <button class="checkout-btn" onclick="showCheckoutModal()">
+                <i class="fab fa-whatsapp"></i> Checkout via WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal" id="checkout-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Konfirmasi Pesanan</h3>
+                <button class="close-modal" onclick="closeCheckoutModal()">×</button>
+            </div>
+            <div class="order-summary" id="order-summary"></div>
+            
+            <form id="checkout-form">
+                <div class="form-group">
+                    <label for="customer-name">Nama Lengkap *</label>
+                    <input type="text" id="customer-name" name="customer-name" required placeholder="Masukkan nama lengkap">
+                </div>
+                <div class="form-group">
+                    <label for="customer-phone">Nomor WhatsApp *</label>
+                    <input type="tel" id="customer-phone" name="customer-phone" required placeholder="08xxxxxxxxxx">
+                </div>
+                <div class="form-group">
+                    <label for="customer-address">Alamat Pengiriman *</label>
+                    <textarea id="customer-address" name="customer-address" rows="3" required placeholder="Masukkan alamat lengkap untuk pengiriman"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="delivery-date">Tanggal Pengiriman *</label>
+                    <input type="date" id="delivery-date" name="delivery-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="delivery-time">Waktu Pengiriman</label>
+                    <select id="delivery-time" name="delivery-time">
+                        <option value="09:00-12:00">Pagi (09:00 - 12:00)</option>
+                        <option value="12:00-15:00">Siang (12:00 - 15:00)</option>
+                        <option value="15:00-18:00">Sore (15:00 - 18:00)</option>
+                        <option value="18:00-21:00">Malam (18:00 - 21:00)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Catatan Khusus</label>
+                    <textarea id="notes" name="notes" rows="2" placeholder="Catatan untuk pesanan (opsional)"></textarea>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                    <h4>Metode Pembayaran:</h4>
+                    <p><strong>Transfer Bank:</strong></p>
+                    <p>BCA: 1234567890 a/n Sweet Bakery</p>
+                    <p>Mandiri: 0987654321 a/n Sweet Bakery</p>
+                    <p><small>*Konfirmasi pembayaran akan dilakukan via WhatsApp</small></p>
+                </div>
+                
+                <button type="submit" class="checkout-btn">
+                    <i class="fab fa-whatsapp"></i> Kirim Pesanan via WhatsApp
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <p>&copy; 2024 Sweet Bakery. All rights reserved. | Dibuat dengan ❤️</p>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/6282228810026?text=Halo%20Sweet%20Bakery!%20Saya%20ingin%20bertanya%20tentang%20produk%20kue%20Anda." class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // Shopping Cart System
+        let cart = JSON.parse(localStorage.getItem('sweetBakeryCart')) || [];
+        
+        // Initialize cart on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartDisplay();
+            updateCartCount();
+            setMinDate();
+        });
+
+        // Set minimum date to today
+        function setMinDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('delivery-date').setAttribute('min', today);
+        }
+
+        // Add item to cart
+        function addToCart(name, price) {
+            const existingItem = cart.find(item => item.name === name);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    name: name,
+                    price: price,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('sweetBakeryCart', JSON.stringify(cart));
+            updateCartDisplay();
+            updateCartCount();
+            
+            // Show success message
+            showToast('Produk berhasil ditambahkan ke keranjang!');
+        }
+
+        // Remove item from cart
+        function removeFromCart(name) {
+            cart = cart.filter(item => item.name !== name);
+            localStorage.setItem('sweetBakeryCart', JSON.stringify(cart));
+            updateCartDisplay();
+            updateCartCount();
+            showToast('Produk berhasil dihapus dari keranjang!');
+        }
+
+        // Update quantity
+        function updateQuantity(name, change) {
+            const item = cart.find(item => item.name === name);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(name);
+                    return;
+                }
+                localStorage.setItem('sweetBakeryCart', JSON.stringify(cart));
+                updateCartDisplay();
+                updateCartCount();
+            }
+        }
+
+        // Update cart display
+        function updateCartDisplay() {
+            const cartItems = document.getElementById('cart-items');
+            const cartFooter = document.getElementById('cart-footer');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>Keranjang belanja kosong</p>
+                    </div>
+                `;
+                cartFooter.style.display = 'none';
+            } else {
+                let cartHTML = '';
+                let total = 0;
+                
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    
+                    cartHTML += `
+                        <div class="cart-item">
+                            <div class="cart-item-info">
+                                <h4>${item.name}</h4>
+                                <p>Rp ${item.price.toLocaleString('id-ID')}</p>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn" onclick="updateQuantity('${item.name}', -1)">-</button>
+                                    <span style="margin: 0 0.5rem; font-weight: bold;">${item.quantity}</span>
+                                    <button class="quantity-btn" onclick="updateQuantity('${item.name}', 1)">+</button>
+                                </div>
+                                <button class="remove-item" onclick="removeFromCart('${item.name}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                cartItems.innerHTML = cartHTML;
+                document.getElementById('cart-total').textContent = `Total: Rp ${total.toLocaleString('id-ID')}`;
+                cartFooter.style.display = 'block';
+            }
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').textContent = count;
+        }
+
+        // Toggle cart sidebar
+        function toggleCart() {
+            const cartSidebar = document.getElementById('cart-sidebar');
+            cartSidebar.classList.toggle('active');
+        }
+
+        // Show checkout modal
+        function showCheckoutModal() {
+            if (cart.length === 0) {
+                showToast('Keranjang belanja kosong!');
+                return;
+            }
+            
+            const modal = document.getElementById('checkout-modal');
+            const orderSummary = document.getElementById('order-summary');
+            
+            let summaryHTML = '<h4>Ringkasan Pesanan:</h4>';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                summaryHTML += `
+                    <div class="order-item">
+                        <span>${item.name} (${item.quantity}x)</span>
+                        <span>Rp ${itemTotal.toLocaleString('id-ID')}</span>
+                    </div>
+                `;
+            });
+            
+            summaryHTML += `
+                <div class="order-item order-total">
+                    <span>Total</span>
+                    <span>Rp ${total.toLocaleString('id-ID')}</span>
+                </div>
+            `;
+            
+            orderSummary.innerHTML = summaryHTML;
+            modal.classList.add('active');
+            toggleCart(); // Close cart sidebar
+        }
+
+        // Close checkout modal
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.remove('active');
+        }
+
+        // Handle checkout form submission
+        document.getElementById('checkout-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const customerName = formData.get('customer-name');
+            const customerPhone = formData.get('customer-phone');
+            const customerAddress = formData.get('customer-address');
+            const deliveryDate = formData.get('delivery-date');
+            const deliveryTime = formData.get('delivery-time');
+            const notes = formData.get('notes');
+            
+            // Format WhatsApp message
+            let message = `🧁 *PESANAN BARU - SWEET BAKERY* 🧁\n\n`;
+            message += `👤 *Nama:* ${customerName}\n`;
+            message += `📱 *WhatsApp:* ${customerPhone}\n`;
+            message += `📍 *Alamat:* ${customerAddress}\n`;
+            message += `📅 *Tanggal Pengiriman:* ${formatDate(deliveryDate)}\n`;
+            message += `⏰ *Waktu Pengiriman:* ${deliveryTime}\n\n`;
+            
+            message += `🛒 *DETAIL PESANAN:*\n`;
+            message += `─────────────────\n`;
+            
+            let total = 0;
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                message += `• ${item.name}\n`;
+                message += `  Qty: ${item.quantity}x | Harga: Rp ${item.price.toLocaleString('id-ID')}\n`;
+                message += `  Subtotal: Rp ${itemTotal.toLocaleString('id-ID')}\n\n`;
+            });
+            
+            message += `─────────────────\n`;
+            message += `💰 *TOTAL: Rp ${total.toLocaleString('id-ID')}*\n\n`;
+            
+            if (notes) {
+                message += `📝 *Catatan:* ${notes}\n\n`;
+            }
+            
+            message += `💳 *METODE PEMBAYARAN:*\n`;
+            message += `• BCA: 1234567890\n`;
+            message += `• Mandiri: 0987654321\n`;
+            message += `a/n Sweet Bakery\n\n`;
+            message += `_Mohon kirim bukti transfer setelah melakukan pembayaran. Terima kasih! 🙏_`;
+            
+            // Send to WhatsApp
+            const whatsappUrl = `https://wa.me/6282228810026?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            
+            // Clear cart and close modal
+            cart = [];
+            localStorage.removeItem('sweetBakeryCart');
+            updateCartDisplay();
+            updateCartCount();
+            closeCheckoutModal();
+            
+            showToast('Pesanan berhasil dikirim! Silakan lanjutkan pembayaran via WhatsApp.');
+        });
+
+        // Format date to Indonesian format
+        function formatDate(dateString) {
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            return new Date(dateString).toLocaleDateString('id-ID', options);
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: linear-gradient(135deg, #ff6b6b, #feca57);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 1003;
+                font-weight: 500;
+                animation: slideInRight 0.3s ease;
+            `;
+            toast.textContent = message;
+            
+            // Add CSS animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideInRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOutRight {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(toast);
+            
+            // Remove toast after 3 seconds
+            setTimeout(() => {
+                toast.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                    document.head.removeChild(style);
+                }, 300);
+            }, 3000);
+        }
+
+        // Mobile menu toggle
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                // Close mobile menu after click
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Contact form submission
+        document.querySelector('#contact form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const message = formData.get('message');
+            
+            const whatsappMessage = `Halo Sweet Bakery!\n\nNama: ${name}\nEmail: ${email}\nPesan: ${message}`;
+            const whatsappUrl = `https://wa.me/6282228810026?text=${encodeURIComponent(whatsappMessage)}`;
+            
+            window.open(whatsappUrl, '_blank');
+            this.reset();
+            showToast('Pesan berhasil dikirim via WhatsApp!');
+        });
+
+        // Add scroll effect to header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 107, 107, 0.95)';
+            } else {
+                header.style.background = 'linear-gradient(135deg, #ff6b6b, #feca57)';
+            }
+        });
+
+        // Close cart when clicking outside
+        document.addEventListener('click', function(e) {
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const cartIcon = document.querySelector('.cart-icon');
+            
+            if (!cartSidebar.contains(e.target) && !cartIcon.contains(e.target)) {
+                cartSidebar.classList.remove('active');
+            }
+        });
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('checkout-modal');
+            const modalContent = document.querySelector('.modal-content');
+            
+            if (e.target === modal) {
+                closeCheckoutModal();
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.menu-item, .gallery-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('nav')) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Handle escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.getElementById('cart-sidebar').classList.remove('active');
+                closeCheckoutModal();
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Phone number formatting
+        document.getElementById('customer-phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^\d]/g, '');
+            if (value.startsWith('0')) {
+                value = '62' + value.substring(1);
+            }
+            e.target.value = value;
+        });
+
+        // Prevent past date selection
+        document.getElementById('delivery-date').addEventListener('change', function(e) {
+            const selectedDate = new Date(e.target.value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            if (selectedDate < today) {
+                showToast('Tidak dapat memilih tanggal yang sudah lewat!');
+                e.target.value = '';
+            }
+        });
+    </script>
+</body>
+</html>
+
